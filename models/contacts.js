@@ -1,69 +1,94 @@
-const fs = require('fs').promises;
-const path = require('path');
-const { nanoid } = require('nanoid');
+const { Schema, model } = require('mongoose');
 
-const contactsPath = path.join(__dirname, 'contacts.json');
+const contactSchema = new Schema({
+  name: {
+    type: String,
+    required: [true, 'Set name for contact'],
+  },
+  email: {
+    type: String,
+  },
+  phone: {
+    type: String,
+  },
+  favorite: {
+    type: Boolean,
+    default: false,
+  },
+});
 
-const listContacts = async () => {
-  const contacts = await fs.readFile(contactsPath);
-  return JSON.parse(contacts);
-};
+const Contact = model('contact', contactSchema);
 
-const getContactById = async (contactId) => {
-  const contacts = await listContacts();
-  const contactById = contacts.find((contact) => contact.id === contactId);
-  return contactById || null;
-};
+module.exports = Contact;
 
-const removeContact = async (contactId) => {
-  const contacts = await listContacts();
-  const contact = contacts.find((contact) => contact.id === contactId);
+// ===========================
 
-  if (contact) {
-    const contactsAfterRemove = contacts.filter(
-      (contact) => contact.id !== contactId
-    );
-    await fs.writeFile(
-      contactsPath,
-      JSON.stringify(contactsAfterRemove, null, ' ')
-    );
+// const fs = require('fs').promises;
+// const path = require('path');
+// const { nanoid } = require('nanoid');
 
-    return contact.id;
-  }
+// const contactsPath = path.join(__dirname, 'contacts.json');
 
-  return null;
-};
+// const listContacts = async () => {
+//   const contacts = await fs.readFile(contactsPath);
+//   return JSON.parse(contacts);
+// };
 
-const addContact = async ({ name, email, phone }) => {
-  const newContact = {
-    id: nanoid(),
-    name,
-    email,
-    phone,
-  };
+// const getContactById = async (contactId) => {
+//   const contacts = await listContacts();
+//   const contactById = contacts.find((contact) => contact.id === contactId);
+//   return contactById || null;
+// };
 
-  const contacts = await listContacts();
-  const newContacts = [...contacts, newContact];
-  await fs.writeFile(contactsPath, JSON.stringify(newContacts, null, ' '));
+// const removeContact = async (contactId) => {
+//   const contacts = await listContacts();
+//   const contact = contacts.find((contact) => contact.id === contactId);
 
-  return newContact;
-};
+//   if (contact) {
+//     const contactsAfterRemove = contacts.filter(
+//       (contact) => contact.id !== contactId
+//     );
+//     await fs.writeFile(
+//       contactsPath,
+//       JSON.stringify(contactsAfterRemove, null, ' ')
+//     );
 
-const updateContact = async (contactId, body) => {
-  const contacts = await listContacts();
-  const index = contacts.findIndex((contact) => contact.id === contactId);
-  if (index === -1) {
-    return null;
-  }
-  contacts[index] = { id: contactId, ...body };
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, ' '));
-  return contacts[index];
-};
+//     return contact.id;
+//   }
 
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-};
+//   return null;
+// };
+
+// const addContact = async ({ name, email, phone }) => {
+//   const newContact = {
+//     id: nanoid(),
+//     name,
+//     email,
+//     phone,
+//   };
+
+//   const contacts = await listContacts();
+//   const newContacts = [...contacts, newContact];
+//   await fs.writeFile(contactsPath, JSON.stringify(newContacts, null, ' '));
+
+//   return newContact;
+// };
+
+// const updateContact = async (contactId, body) => {
+//   const contacts = await listContacts();
+//   const index = contacts.findIndex((contact) => contact.id === contactId);
+//   if (index === -1) {
+//     return null;
+//   }
+//   contacts[index] = { id: contactId, ...body };
+//   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, ' '));
+//   return contacts[index];
+// };
+
+// module.exports = {
+//   listContacts,
+//   getContactById,
+//   removeContact,
+//   addContact,
+//   updateContact,
+// };
