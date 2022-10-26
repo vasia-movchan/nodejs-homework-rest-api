@@ -4,16 +4,16 @@ const ctrl = require('../../controllers/contacts');
 const isValidId = require('../../middlewares/isValidId');
 const auth = require('../../middlewares/auth');
 
-router.get('/', ctrl.getAllContacts);
+router.get('/', auth, ctrl.getAllContacts);
 
-router.get('/:contactId', isValidId, ctrl.getContactById);
+router.get('/:contactId', auth, isValidId, ctrl.getContactById);
 
 router.post('/', auth, ctrl.addContact);
 
-router.delete('/:contactId', isValidId, ctrl.deleteContact);
+router.delete('/:contactId', auth, isValidId, ctrl.deleteContact);
 
-router.put('/:contactId', isValidId, ctrl.updateContact);
+router.put('/:contactId', auth, isValidId, ctrl.updateContact);
 
-router.patch('/:contactId/favorite', isValidId, ctrl.updateStatusContact);
+router.patch('/:contactId/favorite', auth, isValidId, ctrl.updateStatusContact);
 
 module.exports = router;
