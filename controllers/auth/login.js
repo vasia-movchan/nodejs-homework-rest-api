@@ -29,6 +29,7 @@ const loginUser = async (req, res, next) => {
     const secret = process.env.JWT_TOKEN;
     const token = jwt.sign(payload, secret, { expiresIn: '1d' });
 
+    await User.findOneAndUpdate({ email }, { token });
     return res.status(200).json({
       token,
       user: {
