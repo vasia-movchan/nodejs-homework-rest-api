@@ -1,5 +1,6 @@
 const User = require('../../models/user');
 const bcrypt = require('bcrypt');
+const gravatar = require('gravatar');
 
 const { registerSchema } = require('../../schemas/users');
 
@@ -14,13 +15,18 @@ const registerUser = async (req, res, next) => {
     }
 
     const user = await User.findOne({ email });
-    console.log(user);
+
     if (user) {
       return res.status(409).json({ message: 'Email in use' });
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
-    const result = await User.create({ email, password: hashPassword });
+    const avatarURL = gravatar.url(email);
+    const result = await User.create({
+      email,
+      password: hashPassword,
+      avatarURL,
+    });
 
     res
       .status(201)
