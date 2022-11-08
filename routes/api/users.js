@@ -8,4 +8,8 @@ router.get('/current', auth, ctrl.getCurrent);
 
 router.patch('/avatars', auth, upload.single('avatar'), ctrl.updateAvatar);
 
+router.get('/verify/:verificationToken', ctrl.verify);
+
+router.post('/verify', ctrl.resendEmail);
+
 module.exports = router;
