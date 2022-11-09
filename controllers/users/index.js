@@ -2,4 +2,8 @@ const getCurrent = require('./getCurrent');
 
 const updateAvatar = require('./updateAvatar');
 
-module.exports = { getCurrent, updateAvatar };
+const verify = require('./verify');
+
+const resendEmail = require('./resendEmail');
+
+module.exports = { getCurrent, updateAvatar, verify, resendEmail };
